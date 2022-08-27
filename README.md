@@ -1,6 +1,8 @@
 # CommandLineAutomation
 The start of a command line automation project. An auxilliary application for an AI network administrator.
 
+Note: Due to the nature of some of these commands, you may have to run the jar file with administrative provledges.
+
 So far, it's really just a list of commands that can be run directly from Java via main method. These commands by default execute like Windows command prompt but can also be sent to Powershell.
 
 I have been wanting to add full command line automation for a distributed network, NLP based project. This is typically done in Powershell but my understanding of PS is still limmited. However, over time as I get this fleshed out, I will be adding PS scripts along with batch scripts and at some point, linux support with bash. From what I have seen, it won't take long to pick up PS syntax if I am using it regularly.
