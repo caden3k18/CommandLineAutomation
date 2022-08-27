@@ -1,11 +1,10 @@
-/**
- * This class exposes a means to automate certain windows functions and tasks.
- * I will keep adding to this for a bit and eventually set up
- * TCP socket server and clients apps to make use of these for remote administration.
+package client; /**
+ * This class exposes a means to automate certain windows functions and tasks via local network.
+ * I will keep adding to this for a bit...
  *
  * Note: It is likely that most/all of the things done with this project can also be
  * managed directly from powershell. I am using Java as a middleman mostly for demo/fun and
- * because I can add this to one of my main projects as an auxiliary app.
+ * because I can add this to one of my main projects as an auxiliary app. AI Administration, anyone?
  */
 
 
@@ -18,14 +17,21 @@ import java.io.InputStreamReader;
 public class CommandLineExecutor {
 
 
-
-
-    public void executeProcess(String[] args) throws IOException {
+    public static void executeProcess(String[] args) throws IOException {
         Process proc;
 
-        switch (args[0].toLowerCase()){
+        /**
+         * DEBUGGING COMMANDS
+         * for (String s: args) {
+         * System.out.println(s);
+         * }
+         */
+
+
+        switch (args[1].toLowerCase()){
 
 //------------------NETWORK-----------------------------------------------
+
 
             case "ping":
                 /**
@@ -34,18 +40,19 @@ public class CommandLineExecutor {
                  * Also good to see if the client computer has a working internet connection
                  * A ping to a website you know is running will fail if the computer performing the ping is offline
                  */
-                proc = Runtime.getRuntime().exec(args[1]);
+
+                proc = Runtime.getRuntime().exec(args[1] + " " + args[2]);
                 //Show display the results that would normally show up in the prompt.
                 showResults(proc);
                 break;
             case "createnetdrive":
                 //pass the path as a variable to map a network drive
-                proc = Runtime.getRuntime().exec("net use " + args[1]);
+                proc = Runtime.getRuntime().exec("net use " + args[2]);
                 showResults(proc);
                 break;
             case "deletenetdrive":
                 //pass the path as a variable to delete a mapped network drive
-                proc = Runtime.getRuntime().exec("net use " + args[1] + " /delete");
+                proc = Runtime.getRuntime().exec("net use " + args[2] + " /delete");
                 showResults(proc);
                 break;
             case "getmacaddress":
@@ -98,7 +105,7 @@ public class CommandLineExecutor {
                 break;
             case "removeprogram":
                 //Argument is the name of the program you wish to uninstall
-                proc = Runtime.getRuntime().exec("wmic product where name =\"" + args[1] + "\" call uninstall /nointeractive");
+                proc = Runtime.getRuntime().exec("wmic product where name =\"" + args[2] + "\" call uninstall /nointeractive");
                 showResults(proc);
                 break;
             case "getcpudetails":
@@ -124,7 +131,7 @@ public class CommandLineExecutor {
 
             case "killprocess":
                 //Pass a filename to kill the corresponding process
-                proc = Runtime.getRuntime().exec("wmic process where name=\"" + args[1] + "\" call terminate");
+                proc = Runtime.getRuntime().exec("wmic process where name=\"" + args[2] + "\" call terminate");
                 //command + options of what details to display regarding hard drive partitions
                 showResults(proc);
                 break;
@@ -136,9 +143,10 @@ public class CommandLineExecutor {
                 /**
                  * Example parameters: {"powershell.exe", "-Command", "dir"};
                  * Can be any executable with any combination of parameters.
+                 * Note: Not ready with this one yet!
                 **/
 
-                String[] commandList = new String[4];
+                String[] commandList = new String[5];
                 for (int i =1; i < args.length -1; i++){
                     commandList[i -1] = args[i];
                 }
@@ -155,11 +163,12 @@ public class CommandLineExecutor {
                  * Example:
                  * "cmd /c start script1.bat"
                  * new File("C:\\scriptfolder\\"));
+                 *  * Note: Not ready with this one yet!
                  */
                 proc = Runtime.getRuntime().exec(
-                        args[1],
+                        args[2],
                         null,
-                        new File(args[2]));
+                        new File(args[3]));
                 showResults(proc);
                 break;
 
