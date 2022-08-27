@@ -8,9 +8,6 @@ import java.util.Scanner;
 
 public class Client {
 
-//Note: This is intended for a stand alone client application
-
-
 
     public static void main(String args[])
             throws IOException, InterruptedException
@@ -20,7 +17,6 @@ public class Client {
         DatagramSocket dataSocket = new DatagramSocket(5544);
         InetAddress ip = InetAddress.getLocalHost();
 
-        //Note: The server IP will be different on another machine. So, this will need to be handled.
 
         System.out.println("The Client is up...");
 
