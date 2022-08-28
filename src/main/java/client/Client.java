@@ -1,22 +1,24 @@
 package client;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.util.Scanner;
+import java.io.*;
+import java.net.*;
 
 public class Client {
+    public static String msgWaiting = "";
+
+//Note: This is intended for a stand alone client application
 
 
-    public static void main(String args[])
-            throws IOException, InterruptedException
-    {
+
+    public void loadClient() throws IOException, InterruptedException {
+
+
 
         // create DatagramSocket and get ip
         DatagramSocket dataSocket = new DatagramSocket(5544);
         InetAddress ip = InetAddress.getLocalHost();
 
+        //Note: The server IP will be different on another machine. So, this will need to be handled.
 
         System.out.println("The Client is up...");
 
@@ -26,30 +28,35 @@ public class Client {
             public void run()
             {
                 try {
-                    Scanner input = new Scanner(System.in);
+                    //  Scanner input = new Scanner(System.in);
                     while (true) {
                         synchronized (this)
                         {
                             byte[] sendingData = new byte[1000];
 
                             // pulling message from command line
-                            sendingData = input.nextLine().getBytes();
+                            //  sendingData = input.nextLine().getBytes();
+
+                            if (!msgWaiting.isBlank()){
+                                sendingData = msgWaiting.getBytes();
+                                msgWaiting = "";
 
 
+                                DatagramPacket sendingPacket = new DatagramPacket(sendingData, sendingData.length, ip,1122);
 
-                            DatagramPacket sendingPacket = new DatagramPacket(sendingData, sendingData.length, ip,1122);
+                                // send it!
+                                dataSocket.send(sendingPacket);
 
-                            // send it!
-                            dataSocket.send(sendingPacket);
+                                String msg = new String(sendingData);
+                                System.out.println("Client says: " + msg);
+                                // End the session
+                                if (msg.equals("quit")) {
+                                    System.out.println("Exiting the client... ");
+                                    break;
+                                }
+                                System.out.println("Waiting for server response...");
 
-                            String msg = new String(sendingData);
-                            System.out.println("Client says: " + msg);
-                            // End the session
-                            if (msg.equals("quit")) {
-                                System.out.println("Exiting the client... ");
-                                break;
                             }
-                            System.out.println("Waiting for server response...");
                         }
                     }
                 }

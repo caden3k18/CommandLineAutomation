@@ -6,7 +6,7 @@ package server; /**
  */
 
 
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,7 +43,7 @@ public class CommandConsole {
 
             if (m.find())
                 switch (m.group()) {
-                       //Knowing which clients are connected will be necessary to send specific instructions
+                    //Knowing which clients are connected will be necessary to send specific instructions
                     case "get client list":
                         for(String clientRegistry : svr.clientRegistry){
                             System.out.println(clientRegistry);
@@ -60,6 +60,7 @@ public class CommandConsole {
                                 svr.msgWaiting = msg;
                             }
                         }
+                        break;
                     case "cmd":
                         //This will require the specific client details
                         for(String clientRegistry : svr.clientRegistry){
@@ -71,13 +72,14 @@ public class CommandConsole {
                                 svr.msgWaiting = msg;
                             }
                         }
+                        break;
                     case "broadcast":
                         //This will require the specific client details
                         for(String clientRegistry : svr.clientRegistry){
                             String parcel[] = clientRegistry.split("~");
-                                msg = msg.replace("send ", "").replace(" " + parcel[0], "")
-                                        + "~" + parcel[0] + "~" + parcel[1];
-                                svr.msgWaiting = msg;
+                            msg = msg.replace("send ", "").replace(" " + parcel[0], "")
+                                    + "~" + parcel[0] + "~" + parcel[1];
+                            svr.msgWaiting = msg;
                             try {
                                 Thread.sleep(1000);
                             } catch (InterruptedException e) {
