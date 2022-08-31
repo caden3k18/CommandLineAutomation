@@ -1,0 +1,5 @@
+In order for most of these scripts to run, you will need to edit them 
+according to the username and or path of the client machine.
+
+In the case of database backups, you will also have to have the user name
+and password.

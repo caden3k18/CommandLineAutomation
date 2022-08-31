@@ -1,0 +1,1 @@
+mysql --user root --password UserPassword < /data/backup/FileName.sql
