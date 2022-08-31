@@ -1,32 +1,45 @@
 package client; /**
- * This class exposes a means to automate certain windows functions and tasks via local network.
- * I will keep adding to this for a bit...
+ * This class exposes a means to automate certain windows functions and tasks.
+ * I will keep adding to this for a bit and eventually set up
+ * TCP socket server and clients apps to make use of these for remote administration.
  *
  * Note: It is likely that most/all of the things done with this project can also be
  * managed directly from powershell. I am using Java as a middleman mostly for demo/fun and
- * because I can add this to one of my main projects as an auxiliary app. AI Administration, anyone?
+ * because I can add this to one of my main projects as an auxiliary app.
  */
-
-
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.util.Scanner;
+
+
+import Notifications.Emailer;
 
 public class CommandLineExecutor {
 
 
+    static String[] recipients = new String[1];
+
+    static String results = "";
+
     public static void executeProcess(String[] args) throws IOException {
+
+        recipients[0] = "10DigitPhoneNumber@YourCellularGateway.com";
+
+
         Process proc;
+
+        results = "";
 
         /**
          * DEBUGGING COMMANDS
-         * for (String s: args) {
-         * System.out.println(s);
-         * }
          */
-
+        for (String s: args) {
+            System.out.println(s);
+        }
 
         switch (args[1].toLowerCase()){
 
@@ -59,6 +72,22 @@ public class CommandLineExecutor {
                 proc = Runtime.getRuntime().exec("GETMAC /s localhost");
                 showResults(proc);
                 break;
+//----------------DISM OPTIONS--------------------------------------------
+            case "healthcheck":
+                proc = Runtime.getRuntime().exec("DISM /Online /Cleanup-Image /ScanHealth");
+                showResults(proc);
+                if (!results.contains("No component store corruption detected")){
+                    //The scan shows a problem, so the repair process will be attempted automatically.
+                    proc = Runtime.getRuntime().exec("DISM /Online /Cleanup-Image /RestoreHealth");
+                    showResults(proc);
+                    //Since a repair operation was triggered, we will add an alert to be sent to the admin's phone
+
+                    Emailer.sendMail(recipients, "Alert!", "Health Check encountered an issue on " +  InetAddress.getLocalHost().getHostName() +
+                            ". Please verify that the client is online. If so, there is likely damage that cannot be repaired with /RestoreHealth");
+                }
+                break;
+
+
 //----------------SYSTEM INFO---------------------------------------------
 
             case "systeminfo":
@@ -144,9 +173,9 @@ public class CommandLineExecutor {
                  * Example parameters: {"powershell.exe", "-Command", "dir"};
                  * Can be any executable with any combination of parameters.
                  * Note: Not ready with this one yet!
-                **/
+                 **/
 
-                String[] commandList = new String[5];
+                String[] commandList = new String[args.length -1];
                 for (int i =1; i < args.length -1; i++){
                     commandList[i -1] = args[i];
                 }
@@ -156,7 +185,7 @@ public class CommandLineExecutor {
                 showResults(proc);
 
 //---------------------SCRIPT EXECUTOR------------------------------------
-                  case "script":
+            case "script":
                 /**
                  * Here, a call to execute a script can be made. In Windows, this will be a batch file (.bat) or powershell (.ps1).
                  * Linux typically uses a bash script.
@@ -184,12 +213,28 @@ public class CommandLineExecutor {
      * @throws IOException
      * This method allows you to see the text output of what was executed.
      */
-    public static void showResults(Process process) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        String line = "";
-        while ((line = reader.readLine()) != null) {
-            System.out.println(line);
+    public static void showResults(Process process)  {
+
+        Scanner keyboard = new Scanner(System.in);
+
+        try{
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line = "";
+            String temp = "";
+            while ((line = reader.readLine()) != null) {
+                temp = temp + (line) + "\n";
+            }
+
+            results = temp;
+            Client.msgWaiting = temp;
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+
     }
+
 
 }
