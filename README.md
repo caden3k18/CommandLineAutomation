@@ -8,8 +8,11 @@ Note: Due to the nature of some of the example commands, you will have to run th
 Network communications with datagram sockets make it possible to send administration commands over a network as well as to execute scripts remotely. Static commands are stored in an SQLite database for easy modification and reference.
 
 Access a list of commands with descriptions in the DB file with 'cmd <computer host name> listcommands'
+  
 Search for command details based on a keyword with 'cmd <computer host name> commandslike <keyword>'
-Translate a command into it's original Microsoft format with 'cmd <computer host name> commandtranslation <tagName>
+  
+Translate a command into it's original Microsoft format with 'cmd <computer host name> commandtranslation <tagName>'
+  
 
 There are a few things that still need to be developed into this project to make it a little more robust. I may add a scheduling system and a trigger event system.
 I have already provided a simple alert notification option that would compliment and event trigger situation nicely. A simple example of this can be seen in CommandLineExecutor.java with the DISM based health scan function. The tagName is healthcheck.
