@@ -1,17 +1,22 @@
 package client;
 
+import Database.SQLiteCommandDB;
+
 import java.io.*;
 import java.net.*;
+import java.sql.Connection;
 
 public class Client {
     public static String msgWaiting = "";
 
-//Note: This is intended for a stand alone client application
+//Note: Client and server should be compiled separately.
 
 
 
     public void loadClient() throws IOException, InterruptedException {
 
+        SQLiteCommandDB scdb = new SQLiteCommandDB();
+        Connection cnn = new SQLiteCommandDB().connect();
 
 
         // create DatagramSocket and get ip
@@ -20,7 +25,8 @@ public class Client {
 
         //Note: The server IP will be different on another machine. So, this will need to be handled.
 
-        System.out.println("The Client is up...");
+        System.out.println("The Client is ready...");
+
 
         Thread clientSender;
         clientSender = new Thread(new Runnable() {
@@ -51,6 +57,7 @@ public class Client {
                                 System.out.println("Client says: " + msg);
                                 // End the session
                                 if (msg.equals("quit")) {
+                                    scdb.disconnect(cnn);
                                     System.out.println("Exiting the client... ");
                                     break;
                                 }
@@ -92,7 +99,7 @@ public class Client {
                             if (msg.substring(0, 3).contains("cmd")){
 
                                 String[] commandList = msg.split(" ");
-                                CommandLineExecutor.executeProcess(commandList);
+                                CommandLineExecutor.executeProcess(cnn, commandList);
                             }
 
                             // exit condition
