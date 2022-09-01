@@ -1,7 +1,7 @@
 # CommandLineAutomation
 The start of a command line automation project; a concept auxilliary application for an AI network administrator.
 
-There is actually two projects in here; a client and a Server that need to be built and run individually. The client also includes the Database package. 
+There is actually two projects in here; a client and a server that need to be built and run individually. The server is all in one folder, the client includes everything else. 
 
 Note: Due to the nature of some of the example commands, you will have to run the client jar file with administrative privledges. Don't try to run any of the provided commands or functions if you do not fully understand them... You could end up formatting your computer or worse!
 
