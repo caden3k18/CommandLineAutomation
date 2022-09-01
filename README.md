@@ -1,11 +1,11 @@
 # CommandLineAutomation
 The start of a command line automation project; an auxilliary application for an AI network administrator.
 
-Note: Due to the nature of some of these commands, you have to run the client jar file with administrative provledges.
+Note: Due to the nature of some of these commands, you have to run the client jar file with administrative privledges.
 
-Network communications with datagram sockets - this makes it possible to send administration commands over a network as well as to execute scripts remotely.
+Network communications with datagram sockets make it possible to send administration commands over a network as well as to execute scripts remotely.
 
-I have been wanting to add full command line automation for a distributed network, NLP based project. This is typically done in Powershell but my understanding of PS is still limmited. However, over time as I get this fleshed out, I will be adding PS scripts along with batch scripts and at some point, linux support with bash. From what I have seen, it won't take long to pick up PS syntax if I am using it regularly.
+I have been wanting to add full command line automation for a distributed, NLP based project. This is typically done in Powershell but I want to see if I can streamline a few things. However, over time as I get this fleshed out, I will be adding PS scripts along with batch scripts and at some point, linux support with bash. From what I have seen, it won't take long to pick up PS syntax if I am using it regularly.
 
 I will probably not be making a GUI for this as for my own use, I can plug it in directly to a natural language interface. (Administation via voice command!)
 
